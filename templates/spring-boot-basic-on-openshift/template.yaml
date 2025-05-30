@@ -10,7 +10,7 @@ metadata:
     - maven
     - tekton
     - renovate
-    - sonarqube
+    # - sonarqube
     - openshift
     - argocd
 spec:
@@ -94,11 +94,11 @@ spec:
 
     - id: publish
       name: Publishing to the Source Code Repository
-      action: publish:github
+      action: publish:gitlab
       input:
-        allowedHosts: ['github.com']
+        allowedHosts: ['gitlab.cloud.ds']
         description: ${{ parameters.description }}
-        repoUrl: github.com?owner=${{ parameters.orgName }}&repo=${{ parameters.appName }}
+        repoUrl: gitlab.cloud.ds?owner=${{ parameters.orgName }}&repo=${{ parameters.appName }}
         defaultBranch: ${{ parameters.repoBranchName }}
         protectDefaultBranch: false
         repoVisibility: public
@@ -125,11 +125,11 @@ spec:
 
     - id: publish
       name: Publishing to the Config Code Repository
-      action: publish:github
+      action: publish:gitlab
       input:
-        allowedHosts: ['github.com']
+        allowedHosts: ['gitlab.cloud.ds']
         description: ${{ parameters.description }}
-        repoUrl: github.com?owner=${{ parameters.orgName }}&repo=${{ parameters.appName }}-config
+        repoUrl: gitlab.cloud.ds?owner=${{ parameters.orgName }}&repo=${{ parameters.appName }}-config
         defaultBranch: ${{ parameters.repoBranchName }}
         sourcePath: ./gitops
         repoVisibility: public
@@ -154,13 +154,13 @@ spec:
 #        branch: 'master'
 #        visibility: 'public'
 
-    - id: create-webhook
-      name: Create GitHub Webhook
-      action: github:webhook
-      input:
-        repoUrl: github.com?repo=${{ parameters.appName }}&owner=${{ parameters.orgName }}
-        webhookUrl: http://el-${{ parameters.appName }}-${{ parameters.namespace }}.${{ parameters.clusterDomain }}
-        contentType: 'json'
+    # - id: create-webhook
+    #   name: Create gitlab Webhook
+    #   action: gitlab:webhook
+    #   input:
+    #     repoUrl: gitlab.cloud.ds?repo=${{ parameters.appName }}&owner=${{ parameters.orgName }}
+    #     webhookUrl: http://el-${{ parameters.appName }}-${{ parameters.namespace }}.${{ parameters.clusterDomain }}
+    #     contentType: 'json'
         
     - id: create-argocd-resources
       name: Create ArgoCD Resources
@@ -169,7 +169,7 @@ spec:
         appName: ${{ parameters.appName }}
         argoInstance: main
         namespace: ${{ parameters.namespace }}
-        repoUrl: https://github.com/${{ parameters.orgName }}/${{ parameters.appName }}-config.git
+        repoUrl: https://gitlab.cloud.ds/${{ parameters.orgName }}/${{ parameters.appName }}-config.git
         path: 'manifests'
 
   output:
@@ -179,5 +179,5 @@ spec:
       - title: Open the Catalog Info Component
         icon: catalog
         entityRef: ${{ steps.register.output.entityRef }}
-      - title: SonarQube project URL
-        url: ${{ steps['create-sonar-project'].output.projectUrl }}
+      # - title: SonarQube project URL
+      #   url: ${{ steps['create-sonar-project'].output.projectUrl }}
