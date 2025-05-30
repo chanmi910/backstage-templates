@@ -60,7 +60,7 @@ spec:
         apiPath:
           title: REST API path
           type: string
-          default: /api/v1
+          default: /api/v4
         namespace:
           title: The target namespace on Kubernetes
           type: string
