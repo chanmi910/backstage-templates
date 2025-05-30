@@ -105,4 +105,4 @@ spec:
   workspaces:
     - name: source-dir
     - name: maven_settings
-    - name: sonar-settings
+    # - name: sonar-settings
